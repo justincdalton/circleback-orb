@@ -11,14 +11,18 @@ if [ -n "$PARAM_PARAMETERS" ]; then
   PARAMETERS=$(jq -n --argjson json1 "$PARAMETERS" --argjson json2 "$PARAM_PARAMETERS" '$json1 + $json2')
 fi
 
-TRIGGERED_PIPELINE=$(
+API_RESPONSE=$(
   curl --request POST \
     --url "https://circleci.com/api/v2/project/$PARAM_PROJECT/pipeline" \
     --header "Circle-Token: $CIRCLE_TOKEN" \
     --header "content-type: application/json" \
-    --data "{\"branch\":\"$PARAM_BRANCH\",\"parameters\": \"$PARAMETERS\"}" |
-    jq -r '.id'
+    --data "{\"branch\":\"$PARAM_BRANCH\",\"parameters\": \"$PARAMETERS\"}"
 )
+
+echo "API Response:"
+echo "$API_RESPONSE"
+
+TRIGGERED_PIPELINE=$(echo "$RESULT" | jq -r '.id')
 
 echo "Triggered pipeline $TRIGGERED_PIPELINE"
 echo "$TRIGGERED_PIPELINE" >CIRCLEBACK_ORB_PIPELINE_ID
