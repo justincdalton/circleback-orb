@@ -1,0 +1,36 @@
+description: >
+  This job triggers a pipeline in a separate project via the CircleCI API.
+
+executor: default
+
+parameters:
+  circleci_api_key:
+    type: env_var_name
+    default: CIRCLECI_API_KEY
+    description: "The name of the environment variable that contains the CircleCI API key."
+  project:
+    type: string
+    description: "The name of the project to trigger."
+  branch:
+    type: string
+    default: main
+    description: "The branch to trigger the pipeline on."
+  parameters:
+    type: string
+    default: {}
+    description: "The JSON data to send to the CircleCI API."
+steps:
+  - run:
+      environment:
+        PARAM_PROJECT: <<parameters.project>>
+        PARAM_CIRCLECI_API_KEY: <<parameters.circleci_api_key>>
+        PARAM_BRANCH: <<parameters.branch>>
+        PARAM_PARAMETERS: <<parameters.parameters>>
+        PARAM_PIPELINE_ID: << pipeline.id >>
+      name: Trigger Pipeline
+      command: <<include(scripts/trigger.sh)>>
+  - persist_to_workspace:
+      root: .
+      paths:
+        - CIRCLEBACK_ORB_PIPELINE_ID
+

@@ -28,7 +28,9 @@ jobs:
     steps:
       - checkout
       # Run your orb's commands to validate them.
-      - circleback-orb/greet
+      - circleback-orb/trigger:
+          project: github/justincdalton/circleback-orb
+          parameters: { "test": true }
 workflows:
   test-deploy:
     jobs:
@@ -39,13 +41,13 @@ workflows:
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
           filters: *release-filters
-      - orb-tools/publish:
-          orb_name: justincdalton/circleback-orb
-          vcs_type: << pipeline.project.type >>
-          pub_type: production
-          # Ensure this job requires all test jobs and the pack job.
-          requires:
-            - orb-tools/pack
-            - command-test
-          context: orb-publishing
-          filters: *release-filters
+      # - orb-tools/publish:
+      #     orb_name: justincdalton/circleback-orb
+      #     vcs_type: << pipeline.project.type >>
+      #     pub_type: production
+      #     # Ensure this job requires all test jobs and the pack job.
+      #     requires:
+      #       - orb-tools/pack
+      #       - command-test
+      #     context: orb-publishing
+      #     filters: *release-filters

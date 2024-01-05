@@ -8,8 +8,26 @@ filters: &filters
   tags:
     only: /.*/
 
+parameters:
+  test:
+    type: boolean
+    default: false
+    description: "Whether this is test pipeline."
+
+jobs:
+  success:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - run:
+          name: Success
+          command: echo "Success!"
+
+
 workflows:
   lint-pack:
+    when:
+      equal: [false, << pipeline.parameters.test >>]
     jobs:
       - orb-tools/lint:
           filters: *filters
@@ -25,4 +43,10 @@ workflows:
           vcs_type: << pipeline.project.type >>
           orb_name: circleback-orb
           requires: [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check]
+          filters: *filters
+  test:
+    when:
+      equal: [true, << pipeline.parameters.test >>]
+    jobs:
+      - success:
           filters: *filters
