@@ -19,7 +19,13 @@ release-filters: &release-filters
   tags:
     only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
-jobs:
+parameters:
+  circleback_orb_workflow_id:
+    type: string
+    default: ''
+    description: "The parameter that contains the CircleCI workflow ID."
+
+# jobs:
   # Create jobs to test the commands of your orbs.
   # You may want to add additional validation steps to ensure the commands are working as expected.
   # command-test:
