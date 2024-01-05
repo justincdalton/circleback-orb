@@ -16,8 +16,8 @@ parameters:
     default: main
     description: "The branch to trigger the pipeline on."
   parameters:
-    type: string
-    default: {}
+    type: mapping
+    default: '{}'
     description: "The JSON data to send to the CircleCI API."
 steps:
   - run:
