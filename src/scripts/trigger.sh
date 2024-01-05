@@ -3,7 +3,8 @@
 # https://circleci.com/docs/orbs-best-practices/#accepting-parameters-as-strings-or-environment-variables
 
 CIRCLE_TOKEN=${!PARAM_CIRCLECI_API_KEY}
-PARAMETERS="{\"circleback-orb-pipeline-id\":\"$PARAM_PIPELINE_ID\"}"
+CIRCLE_WORKFLOW_ID=${!PARAM_CIRCLE_WORKFLOW_ID}
+PARAMETERS="{\"circleback-orb-workflow-id\":\"$CIRCLE_WORKFLOW_ID\"}"
 
 # merge PARAM_PARAMETERS into PARAMETERS if it exists
 if [ -n "$PARAM_PARAMETERS" ]; then

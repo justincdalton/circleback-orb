@@ -8,6 +8,10 @@ parameters:
     type: env_var_name
     default: CIRCLECI_API_KEY
     description: "The name of the environment variable that contains the CircleCI API key."
+  circle_workflow_id:
+    type: env_var_name
+    default: CIRCLE_WORKFLOW_ID
+    description: "The name of the environment variable that contains the CircleCI workflow ID."
   project:
     type: string
     description: "The name of the project to trigger."
@@ -16,7 +20,7 @@ parameters:
     default: main
     description: "The branch to trigger the pipeline on."
   parameters:
-    type: mapping
+    type: string
     default: '{}'
     description: "The JSON data to send to the CircleCI API."
 steps:
@@ -26,7 +30,7 @@ steps:
         PARAM_CIRCLECI_API_KEY: <<parameters.circleci_api_key>>
         PARAM_BRANCH: <<parameters.branch>>
         PARAM_PARAMETERS: <<parameters.parameters>>
-        PARAM_PIPELINE_ID: << pipeline.id >>
+        PARAM_CIRCLE_WORKFLOW_ID: <<parameters.circle_workflow_id>>
       name: Trigger Pipeline
       command: <<include(scripts/trigger.sh)>>
   - persist_to_workspace:
