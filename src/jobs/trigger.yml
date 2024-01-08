@@ -36,5 +36,4 @@ steps:
   - persist_to_workspace:
       root: .
       paths:
-        - CIRCLEBACK_ORB_PIPELINE_ID
-
+        - CIRCLEBACK_ORB_PIPELINE

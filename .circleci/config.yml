@@ -13,6 +13,10 @@ parameters:
     type: boolean
     default: false
     description: "Whether this is test pipeline."
+  circleback_orb_workflow_id:
+    type: string
+    default: ''
+    description: "The parameter that contains the CircleCI workflow ID."
 
 jobs:
   success:

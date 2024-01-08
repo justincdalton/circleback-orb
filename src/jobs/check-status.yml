@@ -1,0 +1,27 @@
+description: >
+  This job triggers a pipeline in a separate project via the CircleCI API.
+
+executor: default
+
+parameters:
+  circleci_api_key:
+    type: env_var_name
+    default: CIRCLECI_API_KEY
+    description: "The name of the environment variable that contains the CircleCI API key."
+  project:
+    type: string
+    description: "The name of the project to trigger."
+  poll:
+    type: boolean
+    default: false
+    description: "Whether to poll the pipeline status."
+steps:
+  - attach_workspace:
+      at: circleback_workspace
+  - run:
+      environment:
+        PARAM_CIRCLECI_API_KEY: <<parameters.circleci_api_key>>
+        PARAM_PROJECT: <<parameters.project>>
+        PARAM_POLL: <<parameters.poll>>
+      name: Check Pipeline Status
+      command: <<include(scripts/check_status.sh)>>
