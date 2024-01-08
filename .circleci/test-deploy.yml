@@ -47,7 +47,7 @@ workflows:
       - circleback-orb/trigger:
           project: github/justincdalton/circleback-orb
           parameters: '{ "test": true }'
-      - circleback-orb/check-status:
+      - circleback-orb/check_status:
           project: github/justincdalton/circleback-orb
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
