@@ -53,8 +53,7 @@ workflows:
           pub_type: production
           # Ensure this job requires all test jobs and the pack job.
           requires:
+            - command-test
             - orb-tools/pack
-            - circleback-orb/trigger
-            - circleback-orb/check_status
           context: orb-publishing
           filters: *release-filters
