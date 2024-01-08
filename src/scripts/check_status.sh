@@ -18,12 +18,11 @@ fetch_status() {
       --header "content-type: application/json"
   )
 
-  echo "API Response: $API_RESPONSE"
-
   WORKFLOWS=$(echo "$API_RESPONSE" | jq -c '.items[]')
 
   if [ -z "$WORKFLOWS" ]; then
     echo "Failed to fetch workflows."
+    echo "API Response: $API_RESPONSE"
     exit 1
   fi
 
@@ -32,7 +31,7 @@ fetch_status() {
     name=$(echo "$workflow" | jq -r '.name')
     # Check if the status equals "RUNNING"
     if [ "$status" == "running" ]; then
-      echo "Triggered pipeline is still running. Workflow \"$name\" has status $status."
+      echo "Triggered pipeline is still running. Workflow \"$name\" has status \"$status.\""
 
       if [ "$PARAM_POLL" == "false" ]; then
         echo "Polling disabled, exiting."
@@ -43,7 +42,7 @@ fetch_status() {
       fetch_status
       break
     elif [ "$status" != "success" ]; then
-      echo "Triggered pipeline did not succeed. Workflow \"$name\" failed with status $status."
+      echo "Triggered pipeline did not succeed. Workflow \"$name\" failed with status \"$status.\""
       exit 1
     fi
   done
