@@ -34,6 +34,6 @@ steps:
       name: Trigger Pipeline
       command: <<include(scripts/trigger.sh)>>
   - persist_to_workspace:
-      root: ~
+      root: circleback_workspace
       paths:
-        - circleback_workspace
+        - CIRCLEBACK_ORB_PIPELINE
