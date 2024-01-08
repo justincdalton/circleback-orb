@@ -20,7 +20,12 @@ fetch_status() {
 
   echo "API Response: $API_RESPONSE"
 
-  WORKFLOWS=$(echo "$API_RESPONSE" | jq -r '.items[]')
+  WORKFLOWS=$(echo "$API_RESPONSE" | jq -c '.items[]')
+
+  if [ -z "$WORKFLOWS" ]; then
+    echo "Failed to fetch workflows."
+    exit 1
+  fi
 
   for workflow in $WORKFLOWS; do
     status=$(echo "$workflow" | jq -r '.status')
