@@ -10,23 +10,40 @@ fi
 CIRCLE_TOKEN="${!PARAM_CIRCLECI_API_KEY}"
 PIPELINE_ID=$(cat ~/circleback_workspace/CIRCLEBACK_ORB_PIPELINE)
 
-API_RESPONSE=$(
-  curl --request GET \
-    --url "https://circleci.com/api/v2/pipeline/$PIPELINE_ID/workflow" \
-    --header "Circle-Token: $CIRCLE_TOKEN" \
-    --header "content-type: application/json"
-)
+fetch_status() {
+  API_RESPONSE=$(
+    curl --request GET \
+      --url "https://circleci.com/api/v2/pipeline/$PIPELINE_ID/workflow" \
+      --header "Circle-Token: $CIRCLE_TOKEN" \
+      --header "content-type: application/json"
+  )
 
-echo "API Response: $API_RESPONSE"
+  echo "API Response: $API_RESPONSE"
 
-# TRIGGERED_PIPELINE=$(echo "$API_RESPONSE" | jq -r '.id')
+  WORKFLOWS=$(echo "$API_RESPONSE" | jq -r '.items[]')
 
-# if [ -z "$TRIGGERED_PIPELINE" ]; then
-#   echo "Failed to trigger pipeline"
-#   echo "API Response: $API_RESPONSE"
-#   exit 1
-# fi
+  for workflow in "$WORKFLOWS"; do
+    status=$(echo "$workflow" | jq -r '.status')
+    name=$(echo "$workflow" | jq -r '.name')
+    # Check if the status equals "RUNNING"
+    if [ "$status" == "running" ]; then
+      echo "Triggered pipeline is still running. Workflow $name is $status."
 
-# echo "Triggered pipeline $TRIGGERED_PIPELINE"
-# mkdir -p ~/circleback_workspace
-# echo "$TRIGGERED_PIPELINE" >~/circleback_workspace/CIRCLEBACK_ORB_PIPELINE
+      if [ "$PARAM_POLL" == "false" ]; then
+        echo "Polling disabled, exiting."
+        exit 1
+      fi
+
+      sleep 20
+      fetch_status
+      break
+    elif [ "$status" != "success" ]; then
+      echo "Triggered pipeline did not succeed. Workflow $name failed with status $status."
+      exit 1
+    fi
+  done
+
+  echo "Pipeline finished, continuing."
+}
+
+fetch_status
