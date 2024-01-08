@@ -8,7 +8,7 @@ if [ -z "${!PARAM_CIRCLECI_API_KEY}" ]; then
 fi
 
 CIRCLE_TOKEN="${!PARAM_CIRCLECI_API_KEY}"
-PIPELINE_ID=$(cat ~/circleback_workspace/CIRCLEBACK_ORB_PIPELINE)
+PIPELINE_ID=$(cat circleback_workspace/CIRCLEBACK_ORB_PIPELINE)
 
 fetch_status() {
   API_RESPONSE=$(
