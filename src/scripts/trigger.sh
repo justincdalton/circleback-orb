@@ -8,8 +8,12 @@ if [ -z "${!PARAM_CIRCLECI_API_KEY}" ]; then
 fi
 
 CIRCLE_TOKEN="${!PARAM_CIRCLECI_API_KEY}"
-CIRCLE_WORKFLOW_ID="${!PARAM_CIRCLE_WORKFLOW_ID}"
-PARAMETERS="{\"circleback_orb_workflow_id\":\"$CIRCLE_WORKFLOW_ID\"}"
+PARAMETERS="{}"
+
+# Check if CIRCLE_WORKFLOW_ID is set and add to parameters
+if [ -n "$PARAM_WORKFLOW_ID" ]; then
+  PARAMETERS="{\"circleback_workflow_id\":\"$PARAM_WORKFLOW_ID\"}"
+fi
 
 # merge PARAM_PARAMETERS into PARAMETERS if it exists
 if [ -n "$PARAM_PARAMETERS" ]; then
