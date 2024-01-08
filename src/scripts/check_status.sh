@@ -22,7 +22,7 @@ fetch_status() {
 
   WORKFLOWS=$(echo "$API_RESPONSE" | jq -r '.items[]')
 
-  for workflow in "$WORKFLOWS"; do
+  for workflow in $WORKFLOWS; do
     status=$(echo "$workflow" | jq -r '.status')
     name=$(echo "$workflow" | jq -r '.name')
     # Check if the status equals "RUNNING"
