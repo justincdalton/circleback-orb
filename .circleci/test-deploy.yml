@@ -40,6 +40,7 @@ parameters:
 workflows:
   test-deploy:
     jobs:
+      - checkout
       # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
       # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
       # - command-test:
@@ -47,18 +48,21 @@ workflows:
       - circleback-orb/trigger:
           project: github/justincdalton/circleback-orb
           parameters: '{ "test": true }'
+          filters: *filters
       - circleback-orb/check_status:
           project: github/justincdalton/circleback-orb
+          filter: *filters
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
           filters: *release-filters
-      # - orb-tools/publish:
-      #     orb_name: justincdalton/circleback-orb
-      #     vcs_type: << pipeline.project.type >>
-      #     pub_type: production
-      #     # Ensure this job requires all test jobs and the pack job.
-      #     requires:
-      #       - orb-tools/pack
-      #       - command-test
-      #     context: orb-publishing
-      #     filters: *release-filters
+      - orb-tools/publish:
+          orb_name: justincdalton/circleback-orb
+          vcs_type: << pipeline.project.type >>
+          pub_type: production
+          # Ensure this job requires all test jobs and the pack job.
+          requires:
+            - orb-tools/pack
+            - circleback-orb/trigger
+            - circleback-orb/check_status
+          context: orb-publishing
+          filters: *release-filters
