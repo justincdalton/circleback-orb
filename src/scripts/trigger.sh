@@ -33,5 +33,5 @@ if [ -z "$TRIGGERED_PIPELINE" ]; then
 fi
 
 echo "Triggered pipeline $TRIGGERED_PIPELINE"
-mkdir -p ~/circleback_workspace
-echo "$TRIGGERED_PIPELINE" >~/circleback_workspace/CIRCLEBACK_ORB_PIPELINE
+mkdir -p circleback_workspace
+echo "$TRIGGERED_PIPELINE" >circleback_workspace/CIRCLEBACK_ORB_PIPELINE
