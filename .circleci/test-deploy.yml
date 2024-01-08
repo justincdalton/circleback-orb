@@ -37,7 +37,6 @@ jobs:
           parameters: '{ "test": true }'
       - circleback-orb/check_status:
           project: github/justincdalton/circleback-orb
-          filter: *filters
 workflows:
   test-deploy:
     jobs:
