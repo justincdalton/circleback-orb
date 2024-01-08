@@ -32,23 +32,23 @@ fetch_status() {
     name=$(echo "$workflow" | jq -r '.name')
     # Check if the status equals "RUNNING"
     if [ "$status" == "running" ]; then
-      echo "Triggered pipeline is still running. Workflow $name is $status."
+      echo "Triggered pipeline is still running. Workflow \"$name\" has status $status."
 
       if [ "$PARAM_POLL" == "false" ]; then
         echo "Polling disabled, exiting."
         exit 1
       fi
 
-      sleep 20
+      sleep "$PARAM_POLL_INTERVAL"
       fetch_status
       break
     elif [ "$status" != "success" ]; then
-      echo "Triggered pipeline did not succeed. Workflow $name failed with status $status."
+      echo "Triggered pipeline did not succeed. Workflow \"$name\" failed with status $status."
       exit 1
     fi
   done
-
-  echo "Pipeline finished, continuing."
 }
 
 fetch_status
+
+echo "Pipeline finished, continuing."

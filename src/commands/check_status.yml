@@ -13,6 +13,10 @@ parameters:
     type: boolean
     default: true
     description: "Whether to poll the pipeline status."
+  poll_interval:
+    type: integer
+    default: 20
+    description: "The number of seconds to wait between polling the pipeline status."
 steps:
   - attach_workspace:
       at: circleback_workspace
@@ -21,5 +25,6 @@ steps:
         PARAM_CIRCLECI_API_KEY: <<parameters.circleci_api_key>>
         PARAM_PROJECT: <<parameters.project>>
         PARAM_POLL: <<parameters.poll>>
+        PARAM_POLL_INTERVAL: <<parameters.poll_interval>>
       name: Check Pipeline Status
       command: <<include(scripts/check_status.sh)>>
