@@ -1,7 +1,5 @@
 description: >
-  This job triggers a pipeline in a separate project via the CircleCI API.
-
-executor: default
+  This command checks the status of a pipeline in a separate project via the CircleCI API.
 
 parameters:
   circleci_api_key:
