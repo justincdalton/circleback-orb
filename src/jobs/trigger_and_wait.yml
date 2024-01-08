@@ -25,14 +25,13 @@ parameters:
     description: "The JSON data to send to the CircleCI API."
 steps:
   - checkout
-  - circleback-orb/trigger:
+  - trigger:
       project: <<parameters.project>>
       branch: <<parameters.branch>>
       parameters: <<parameters.parameters>>
       circleci_api_key: <<parameters.circleci_api_key>>
       circle_workflow_id: <<parameters.circle_workflow_id>>
-  - circleback-orb/check_status:
+  - check_status:
       project: <<parameters.project>>
       circleci_api_key: <<parameters.circleci_api_key>>
-      circle_workflow_id: <<parameters.circle_workflow_id>>
       poll: true
