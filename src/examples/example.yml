@@ -1,13 +1,30 @@
 description: >
-  Sample example description.
+  Simple example using the trigger and check_status commands.
 # Provide a use-case based example for using this orb.
 # Everything in the `usage` section will be displayed in the orb registry.
 # Comments are not retained.
 usage:
   version: 2.1
   orbs:
-    <orb-name>: <namespace>/<orb-name>@1.2.3
+    circlback-orb: justincdalton/circleback-orb@1.0.0
+  jobs:
+    run-tests:
+      executor: circlback-orb/default
+      steps:
+        - checkout
+        - circleback-orb/trigger:
+            project: github/justincdalton/circleback-orb
+            parameters: '{ "test": true }'
+        - circleback-orb/check_status:
+            project: github/justincdalton/circleback-orb
   workflows:
-    use-my-orb:
+    trigger-another-pipeline:
       jobs:
-        - <orb-name>/<job-name>
+        - build
+        - run-tests:
+            requires:
+              - build
+        - deploy:
+            requires:
+              - run-tests
+
