@@ -1,7 +1,7 @@
 # Circleback Orb
 
 
-[![CircleCI Build Status](https://circleci.com/gh/justincdalton/circleback.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/justincdalton/circleback) [![CircleCI Orb Version](https://badges.circleci.com/orbs/justincdalton/circleback.svg)](https://circleci.com/developer/orbs/orb/justincdalton/circleback) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/justincdalton/circleback-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
+[![CircleCI Build Status](https://circleci.com/gh/justincdalton/circleback-org.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/justincdalton/circleback-orb) [![CircleCI Orb Version](https://badges.circleci.com/orbs/justincdalton/circleback.svg)](https://circleci.com/developer/orbs/orb/justincdalton/circleback) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/justincdalton/circleback-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
 
 
 This orb is a helper when orchestrating pipelines with the [circleback pattern](https://circleci.com/blog/pipeline-orchestration-circleback/). It has commands for triggering another CircleCI pipeline and checking the status of the triggered pipeline.
