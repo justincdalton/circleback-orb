@@ -4,7 +4,7 @@ orbs:
   # Reference your orb's jobs and commands below as they will exist when built.
   orb-tools: circleci/orb-tools@12.0
   # The orb definition is intentionally not included here. It will be injected into the pipeline.
-  circleback-orb: {}
+  circleback: {}
 
 # Use this tag to ensure test jobs always run,
 # even though the downstream publish job will only run on release tags.
@@ -32,10 +32,10 @@ jobs:
     steps:
       - checkout
       # Run your orb's commands to validate them.
-      - circleback-orb/trigger:
+      - circleback/trigger:
           project: github/justincdalton/circleback-orb
           parameters: '{ "test": true }'
-      - circleback-orb/check_status:
+      - circleback/check_status:
           project: github/justincdalton/circleback-orb
           poll_interval: 1
 workflows:
@@ -49,7 +49,7 @@ workflows:
       - orb-tools/pack:
           filters: *release-filters
       - orb-tools/publish:
-          orb_name: justincdalton/circleback-orb
+          orb_name: justincdalton/circleback
           vcs_type: << pipeline.project.type >>
           pub_type: production
           # Ensure this job requires all test jobs and the pack job.
