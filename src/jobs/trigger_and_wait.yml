@@ -19,10 +19,6 @@ parameters:
   project:
     type: string
     description: "The name of the project to trigger."
-  workflow_id:
-    type: string
-    default: ''
-    description: "The workflow ID for the current circle workflow."
 steps:
   - checkout
   - trigger:
@@ -30,7 +26,6 @@ steps:
       circleci_api_key: <<parameters.circleci_api_key>>
       parameters: <<parameters.parameters>>
       project: <<parameters.project>>
-      workflow_id: <<parameters.workflow_id>>
   - check_status:
       circleci_api_key: <<parameters.circleci_api_key>>
       poll: true

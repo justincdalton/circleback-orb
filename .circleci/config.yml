@@ -10,9 +10,13 @@ filters: &filters
 
 parameters:
   test:
-    type: boolean
-    default: false
+    type: string
+    default: ""
     description: "Whether this is test pipeline."
+  circleback_workflow_id:
+    type: string
+    default: ""
+    description: "The parameter that contains the CircleCI workflow ID."
 
 jobs:
   success:
@@ -27,7 +31,7 @@ jobs:
 workflows:
   lint-pack:
     when:
-      equal: [false, << pipeline.parameters.test >>]
+      equal: ["", << pipeline.parameters.test >>]
     jobs:
       - orb-tools/lint:
           filters: *filters
@@ -44,9 +48,27 @@ workflows:
           orb_name: circleback
           requires: [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check]
           filters: *filters
-  test:
+
+  test_wait:
     when:
-      equal: [true, << pipeline.parameters.test >>]
+      equal: ["wait", << pipeline.parameters.test >>]
     jobs:
       - success:
           filters: *filters
+
+  test-approval:
+    when:
+      equal: ["approve", << pipeline.parameters.test >>]
+    jobs:
+      - orb-tools/pack:
+          filters: *filters
+      - orb-tools/continue:
+          config_path: .circleci/test-approval.yml
+          pipeline_number: << pipeline.number >>
+          vcs_type: << pipeline.project.type >>
+          orb_name: circleback
+          requires: [orb-tools/pack]
+          filters: *filters
+
+
+
