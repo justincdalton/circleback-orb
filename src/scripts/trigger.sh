@@ -7,6 +7,10 @@ if [ -z "${!PARAM_CIRCLECI_API_KEY}" ]; then
   echo "CircleCI API key not set"
 fi
 
+if [ -z "${PARAM_BRANCH}" ]; then
+  PARAM_BRANCH="main"
+fi
+
 CIRCLE_TOKEN="${!PARAM_CIRCLECI_API_KEY}"
 PARAMETERS="{}"
 
