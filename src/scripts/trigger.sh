@@ -11,8 +11,8 @@ CIRCLE_TOKEN="${!PARAM_CIRCLECI_API_KEY}"
 PARAMETERS="{}"
 
 # Check if CIRCLE_WORKFLOW_ID is set and add to parameters
-if [ -n "$PARAM_WORKFLOW_ID" ]; then
-  PARAMETERS="{\"circleback_workflow_id\":\"$PARAM_WORKFLOW_ID\"}"
+if [ -n "$PARAM_INCLUDE_WORKFLOW_ID" ]; then
+  PARAMETERS="{\"circleback_workflow_id\":\"$CIRCLE_WORKFLOW_ID\"}"
 fi
 
 # merge PARAM_PARAMETERS into PARAMETERS if it exists

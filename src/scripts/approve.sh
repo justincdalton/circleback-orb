@@ -1,0 +1,46 @@
+#!/bin/bash
+# This example uses envsubst to support variable substitution in the string parameter type.
+# https://circleci.com/docs/orbs-best-practices/#accepting-parameters-as-strings-or-environment-variables
+
+# Check if the key variable is set
+if [ -z "${!PARAM_CIRCLECI_API_KEY}" ]; then
+  echo "CircleCI API key not set"
+fi
+
+if [ -z "${PARAM_WORKFLOW_ID}" ]; then
+  echo "CircleCI Workflow ID not set"
+fi
+
+if [ -z "${PARAM_APPROVAL_JOB}" ]; then
+  echo "CircleCI approval job not set"
+fi
+
+CIRCLE_TOKEN="${!PARAM_CIRCLECI_API_KEY}"
+
+JOB_API_RESPONSE=$(
+  curl --request GET \
+    --url "https://circleci.com/api/v2/workflow/$PARAM_WORKFLOW_ID/job" \
+    --header "Circle-Token: $CIRCLE_TOKEN" \
+    --header "content-type: application/json"
+)
+
+JOB_ID=$(echo "$JOB_API_RESPONSE" | jq -r ".items[] | select(.name == \"$PARAM_APPROVAL_JOB\") | .id")
+
+echo "Approval job $JOB_ID"
+
+APPROVAL_API_RESPONSE=$(
+  curl -iX POST \
+    --url "https://circleci.com/api/v2/workflow/$PARAM_WORKFLOW_ID/approve/$JOB_ID" \
+    --header "Circle-Token: $CIRCLE_TOKEN"
+)
+
+APPROVAL_API_RESPONSE_CODE=$(echo "$APPROVAL_API_RESPONSE" | head -n 1 | cut -d$' ' -f2)
+
+if [ "$APPROVAL_API_RESPONSE_CODE" -ne 202 ]; then
+  echo "Failed to approve job"
+  echo "API Response Code: $APPROVAL_API_RESPONSE_CODE"
+  echo "API Response: $APPROVAL_API_RESPONSE"
+  exit 1
+else
+  echo "Approved job $JOB_ID"
+fi

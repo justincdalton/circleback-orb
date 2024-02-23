@@ -17,10 +17,10 @@ parameters:
   project:
     type: string
     description: "The name of the project to trigger."
-  workflow_id:
-    type: string
-    default: ''
-    description: "The workflow ID for the current circle workflow."
+  include_workflow_id:
+    type: boolean
+    default: false
+    description: "Whether to include the workflow ID in the pipeline parameters."
 steps:
   - run:
       environment:
@@ -28,7 +28,7 @@ steps:
         PARAM_CIRCLECI_API_KEY: <<parameters.circleci_api_key>>
         PARAM_PARAMETERS: <<parameters.parameters>>
         PARAM_PROJECT: <<parameters.project>>
-        PARAM_WORKFLOW_ID: <<parameters.workflow_id>>
+        PARAM_INCLUDE_WORKFLOW_ID: <<parameters.include_workflow_id>>
       name: Trigger Pipeline
       command: <<include(scripts/trigger.sh)>>
   - persist_to_workspace:

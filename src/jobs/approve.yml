@@ -1,0 +1,26 @@
+description: >
+  This job triggers a pipeline in a separate project via the CircleCI API.
+
+executor: default
+
+parameters:
+  circleci_api_key:
+    type: env_var_name
+    default: CIRCLECI_API_KEY
+    description: "The name of the environment variable that contains the CircleCI API key."
+  project:
+    type: string
+    description: "The name of the project with the approval job."
+  workflow_id:
+    type: string
+    description: "The workflow ID for the approval job."
+  approval_job:
+    type: string
+    description: "The name of the approval job."
+steps:
+  - checkout
+  - approve:
+      circleci_api_key: <<parameters.circleci_api_key>>
+      project: <<parameters.project>>
+      workflow_id: <<parameters.workflow_id>>
+      approval_job: <<parameters.approval_job>>

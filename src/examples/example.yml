@@ -6,17 +6,17 @@ description: >
 usage:
   version: 2.1
   orbs:
-    circlback-orb: justincdalton/circleback@1.0.2
+    circlback-orb: justindalton/circleback@1.0.2
   jobs:
     run-tests:
       executor: circlback/default
       steps:
         - checkout
         - circleback/trigger:
-            project: github/justincdalton/circleback-orb
+            project: github/justindalton/circleback-orb
             parameters: '{ "test": true }'
         - circleback/check_status:
-            project: github/justincdalton/circleback-orb
+            project: github/justindalton/circleback-orb
   workflows:
     trigger-another-pipeline:
       jobs:
