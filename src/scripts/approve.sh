@@ -18,7 +18,7 @@ fi
 CIRCLE_TOKEN="${!PARAM_CIRCLECI_API_KEY}"
 
 if [ -z "${PARAM_WORKFLOW_ID}" ]; then
-  echo "Fetching workflow ID from pipeline ID"
+  echo "Fetching workflow ID from pipeline ID: $PARAM_PIPELINE_ID"
   WORKFLOW_API_RESPONSE=$(
     curl --request GET \
       --url "https://circleci.com/api/v2/pipeline/$PARAM_PIPELINE_ID/workflow" \
@@ -29,6 +29,8 @@ if [ -z "${PARAM_WORKFLOW_ID}" ]; then
   PARAM_WORKFLOW_ID=$(echo "$WORKFLOW_API_RESPONSE" | jq -r ".items[0].id")
 fi
 
+echo "Workflow ID: $PARAM_WORKFLOW_ID"
+
 JOB_API_RESPONSE=$(
   curl --request GET \
     --url "https://circleci.com/api/v2/workflow/$PARAM_WORKFLOW_ID/job" \
@@ -38,7 +40,7 @@ JOB_API_RESPONSE=$(
 
 JOB_ID=$(echo "$JOB_API_RESPONSE" | jq -r ".items[] | select(.name == \"$PARAM_APPROVAL_JOB\") | .id")
 
-echo "Approval job $JOB_ID"
+echo "Approval job ID: $JOB_ID"
 
 APPROVAL_API_RESPONSE=$(
   curl -iX POST \
@@ -54,5 +56,5 @@ if [ "$APPROVAL_API_RESPONSE_CODE" -ne 202 ]; then
   echo "API Response: $APPROVAL_API_RESPONSE"
   exit 1
 else
-  echo "Approved job $JOB_ID"
+  echo "Approved job ID: $JOB_ID"
 fi
