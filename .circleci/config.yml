@@ -27,7 +27,6 @@ jobs:
           name: Success
           command: echo "Success!"
 
-
 workflows:
   lint-pack:
     when:
@@ -46,7 +45,8 @@ workflows:
           pipeline_number: << pipeline.number >>
           vcs_type: << pipeline.project.type >>
           orb_name: circleback
-          requires: [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check]
+          requires:
+            [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check]
           filters: *filters
 
   test_wait:
@@ -56,19 +56,16 @@ workflows:
       - success:
           filters: *filters
 
-  test-approval:
+  test-approve:
     when:
       equal: ["approve", << pipeline.parameters.test >>]
     jobs:
       - orb-tools/pack:
           filters: *filters
       - orb-tools/continue:
-          config_path: .circleci/test-approval.yml
+          config_path: .circleci/test-approve.yml
           pipeline_number: << pipeline.number >>
           vcs_type: << pipeline.project.type >>
           orb_name: circleback
           requires: [orb-tools/pack]
           filters: *filters
-
-
-

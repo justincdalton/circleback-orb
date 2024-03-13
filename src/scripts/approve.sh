@@ -7,8 +7,8 @@ if [ -z "${!PARAM_CIRCLECI_API_KEY}" ]; then
   echo "CircleCI API key not set"
 fi
 
-if [ -z "${PARAM_WORKFLOW_ID}" ]; then
-  echo "CircleCI Workflow ID not set"
+if [ -z "${PARAM_WORKFLOW_ID}" ] && [ -z "${PARAM_PIPELINE_ID}" ]; then
+  echo "CircleCI Workflow ID and Pipeline not set"
 fi
 
 if [ -z "${PARAM_APPROVAL_JOB}" ]; then
@@ -16,6 +16,18 @@ if [ -z "${PARAM_APPROVAL_JOB}" ]; then
 fi
 
 CIRCLE_TOKEN="${!PARAM_CIRCLECI_API_KEY}"
+
+if [ -z "${PARAM_WORKFLOW_ID}" ]; then
+  echo "Fetching workflow ID from pipeline ID"
+  WORKFLOW_API_RESPONSE=$(
+    curl --request GET \
+      --url "https://circleci.com/api/v2/pipeline/$PARAM_PIPELINE_ID/workflow" \
+      --header "Circle-Token: $CIRCLE_TOKEN" \
+      --header "content-type: application/json"
+  )
+
+  PARAM_WORKFLOW_ID=$(echo "$WORKFLOW_API_RESPONSE" | jq -r ".items[0].id")
+fi
 
 JOB_API_RESPONSE=$(
   curl --request GET \

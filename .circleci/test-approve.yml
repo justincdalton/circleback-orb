@@ -21,5 +21,11 @@ workflows:
     jobs:
       - circleback/approve:
           project: github/justindalton/circleback-orb
+          pipeline_id: << pipeline.id >>
+          approval_job: pipeline-approval-test
+      - circleback/approve:
+          project: github/justindalton/circleback-orb
           workflow_id: << pipeline.parameters.circleback_workflow_id >>
-          approval_job: approval-test
+          approval_job: workflow-approval-test
+      - pipeline-approval-test:
+          type: approval

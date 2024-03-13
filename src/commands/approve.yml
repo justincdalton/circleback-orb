@@ -9,9 +9,13 @@ parameters:
   project:
     type: string
     description: "The name of the project with the approval job."
+  pipeline_id:
+    type: string
+    default: ""
+    description: "The pipeline ID for the approval job."
   workflow_id:
     type: string
-    default: ''
+    default: ""
     description: "The workflow ID for the approval job."
   approval_job:
     type: string
@@ -21,6 +25,7 @@ steps:
       environment:
         PARAM_CIRCLECI_API_KEY: <<parameters.circleci_api_key>>
         PARAM_PROJECT: <<parameters.project>>
+        PARAM_PIPELINE_ID: <<parameters.pipeline_id>>
         PARAM_WORKFLOW_ID: <<parameters.workflow_id>>
         PARAM_APPROVAL_JOB: <<parameters.approval_job>>
       name: Approve Job

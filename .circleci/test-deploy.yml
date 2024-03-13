@@ -22,7 +22,7 @@ release-filters: &release-filters
 parameters:
   circleback_orb_workflow_id:
     type: string
-    default: ''
+    default: ""
     description: "The parameter that contains the CircleCI workflow ID."
 
 jobs:
@@ -52,7 +52,7 @@ workflows:
       # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
       - command-test:
           filters: *filters
-      - approval-test:
+      - workflow-approval-test:
           type: approval
           filters: *filters
           requires:
@@ -67,7 +67,7 @@ workflows:
           # Ensure this job requires all test jobs and the pack job.
           requires:
             - command-test
-            - approval-test
+            - workflow-approval-test
             - orb-tools/pack
           context: orb-publishing
           filters: *release-filters
