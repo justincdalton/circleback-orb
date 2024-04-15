@@ -21,6 +21,10 @@ parameters:
     type: boolean
     default: false
     description: "Whether to include the workflow ID in the pipeline parameters."
+  workflow_id_key:
+    type: string
+    description: "The name of the workflow ID parameter in the pipeline parameters."
+    default: circleback_workflow_id
 steps:
   - run:
       environment:
@@ -29,6 +33,7 @@ steps:
         PARAM_PARAMETERS: <<parameters.parameters>>
         PARAM_PROJECT: <<parameters.project>>
         PARAM_INCLUDE_WORKFLOW_ID: <<parameters.include_workflow_id>>
+        PARAM_WORKFLOW_ID_KEY: <<parameters.workflow_id_key>>
       name: Trigger Pipeline
       command: <<include(scripts/trigger.sh)>>
   - persist_to_workspace:

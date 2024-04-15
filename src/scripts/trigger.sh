@@ -14,14 +14,15 @@ fi
 CIRCLE_TOKEN="${!PARAM_CIRCLECI_API_KEY}"
 PARAMETERS="{}"
 
-# Check if CIRCLE_WORKFLOW_ID is set and add to parameters
-if [ -n "$PARAM_INCLUDE_WORKFLOW_ID" ]; then
-  PARAMETERS="{\"circleback_workflow_id\":\"$CIRCLE_WORKFLOW_ID\"}"
+echo "Include workflow id: $PARAM_INCLUDE_WORKFLOW_ID"
+if [ "$PARAM_INCLUDE_WORKFLOW_ID" == "1" ]; then
+  echo "Workflow id key: $PARAM_WORKFLOW_ID_KEY"
+  PARAMETERS="{\"$PARAM_WORKFLOW_ID_KEY\":\"$CIRCLE_WORKFLOW_ID\"}"
 fi
 
 # merge PARAM_PARAMETERS into PARAMETERS if it exists
 if [ -n "$PARAM_PARAMETERS" ]; then
-  PARAMETERS=$(jq -nc --argjson json1 "$PARAMETERS" --argjson json2 "$PARAM_PARAMETERS" '$json1 + $json2')
+  PARAMETERS=$(echo "$PARAMETERS" | jq -s ".[0] * $PARAM_PARAMETERS")
 fi
 
 API_RESPONSE=$(
@@ -41,5 +42,6 @@ if [ -z "$TRIGGERED_PIPELINE" ]; then
 fi
 
 echo "Triggered pipeline $TRIGGERED_PIPELINE"
+echo "with parameters $PARAMETERS"
 mkdir -p circleback_workspace
 echo "$TRIGGERED_PIPELINE" >circleback_workspace/CIRCLEBACK_ORB_PIPELINE

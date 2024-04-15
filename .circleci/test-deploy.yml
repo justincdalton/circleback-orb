@@ -44,6 +44,7 @@ jobs:
           project: github/justindalton/circleback-orb
           parameters: '{ "test": "approve" }'
           include_workflow_id: true
+          workflow_id_key: test_workflow_id
 
 workflows:
   test-deploy:
